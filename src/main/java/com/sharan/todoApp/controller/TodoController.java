@@ -32,4 +32,9 @@ public class TodoController {
     public TodoItem update(@Valid @NotNull @RequestBody TodoItem todoItem){
         return todoRepo.save(todoItem);
     }
+
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable long id){
+        todoRepo.deleteById(id);
+    }
 }

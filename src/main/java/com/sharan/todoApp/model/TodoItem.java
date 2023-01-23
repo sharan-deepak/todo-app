@@ -6,15 +6,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "todo")
-public class TodoItem {
-    private Long id;
+public class TodoItem implements Serializable {
+    private int id;
     @NotBlank
     private String title;
     private boolean status;
 
-    public TodoItem(Long id, String title, boolean status) {
+    public TodoItem(int id, String title, boolean status) {
         this.id = id;
         this.title = title;
         this.status = status;
@@ -24,11 +26,11 @@ public class TodoItem {
     }
     @Id
     @GeneratedValue
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -40,7 +42,7 @@ public class TodoItem {
         this.title = title;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 

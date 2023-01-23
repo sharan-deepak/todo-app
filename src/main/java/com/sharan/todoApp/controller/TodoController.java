@@ -2,6 +2,7 @@ package com.sharan.todoApp.controller;
 
 
 import com.sharan.todoApp.model.TodoItem;
+import com.sharan.todoApp.publisher.RabbitMQProducer;
 import com.sharan.todoApp.repository.TodoRepo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -15,17 +16,23 @@ import java.util.List;
 @RequestMapping(value="/todo")
 public class TodoController {
 
+    private RabbitMQProducer producer;
+    public TodoController(RabbitMQProducer producer) {
+        this.producer = producer;
+    }
     @Autowired
     private TodoRepo todoRepo;
 
-    @GetMapping
+    @GetMapping()
     public List<TodoItem> findAll(){
         return todoRepo.findAll();
     }
 
-    @PostMapping
-    public TodoItem save(@Valid @NotNull @RequestBody TodoItem todoItem){
-        return todoRepo.save(todoItem);
+    @PostMapping()
+    public String save(@Valid @NotNull @RequestBody TodoItem todoItem){
+        todoRepo.save(todoItem);
+        producer.sendMessage(todoItem);
+        return "Succesfully Sent to RabbitMQ";
     }
 
     @PutMapping
@@ -37,4 +44,6 @@ public class TodoController {
     public void delete(@PathVariable long id){
         todoRepo.deleteById(id);
     }
+
+
 }

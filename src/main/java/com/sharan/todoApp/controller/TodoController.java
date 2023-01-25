@@ -4,8 +4,8 @@ package com.sharan.todoApp.controller;
 import com.sharan.todoApp.model.TodoItem;
 import com.sharan.todoApp.publisher.RabbitMQProducer;
 import com.sharan.todoApp.repository.TodoRepo;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +30,7 @@ public class TodoController {
 
     @PostMapping()
     public String save(@Valid @NotNull @RequestBody TodoItem todoItem){
-        todoRepo.save(todoItem);
+
         producer.sendMessage(todoItem);
         return "Succesfully Sent to RabbitMQ";
     }
